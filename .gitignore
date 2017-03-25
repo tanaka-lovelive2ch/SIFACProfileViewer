@@ -98,3 +98,6 @@ flycheck_*.el
 
 # directory configuration
 .dir-locals.el
+
+# tern
+.tern-port
