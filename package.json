@@ -7,9 +7,14 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"bluebird": "^3.5.0",
+		"csv-parse": "^1.2.0",
 		"react": "~15.4.1",
 		"react-native": "0.42.3",
-		"react-native-camera": "https://github.com/lwansbrough/react-native-camera"
+		"react-native-camera": "https://github.com/lwansbrough/react-native-camera",
+		"react-native-sqlite-storage": "^3.2.2",
+		"sqlite": "^2.5.0",
+		"sqlite3": "^3.1.8"
 	},
 	"devDependencies": {
 		"babel-jest": "19.0.0",
