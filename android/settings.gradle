@@ -1,0 +1,3 @@
+rootProject.name = 'SIFACProfileViewer'
+
+include ':app'
