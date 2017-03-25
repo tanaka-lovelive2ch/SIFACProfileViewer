@@ -101,3 +101,6 @@ flycheck_*.el
 
 # tern
 .tern-port
+
+# pre-populated db
+android/app/src/main/assets/www
