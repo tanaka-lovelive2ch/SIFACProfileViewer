@@ -1,4 +1,4 @@
-import { AppRegistry } from 'react-native';
+import { AppRegistry } from 'react-native'
 import App from './src/components/app'
 
-AppRegistry.registerComponent('SIFACProfileViewer', () => App);
+AppRegistry.registerComponent('SIFACProfileViewer', () => App)

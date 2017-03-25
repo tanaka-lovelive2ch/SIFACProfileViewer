@@ -3,6 +3,7 @@ import { NavigationActions, addNavigationHelpers } from 'react-navigation'
 import { View, StyleSheet, BackAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import RootNavigator from './root-navigator'
+import * as AppActions from '../actions/app'
 
 class RootNavigatorContainer extends Component {
   getCurrentRoute(nav) {
@@ -16,13 +17,17 @@ class RootNavigatorContainer extends Component {
   componentWillMount() {
     // initialize state
     const { dispatch } = this.props
-
+    dispatch(AppActions.initializeApp())
   }
   
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', () => {
       const { dispatch, nav } = this.props
       const { routeName } = this.getCurrentRoute(nav)
+      if (routeName === 'Auth') {
+        return true
+      }
+      
       if (routeName !== 'Home') {
         dispatch(NavigationActions.back())
         return true

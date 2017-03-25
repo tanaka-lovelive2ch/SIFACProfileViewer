@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { View, Text } from 'react-native'
+import { View, Text, AsyncStorage } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 
 class HomeScreen extends Component {
   render() {
