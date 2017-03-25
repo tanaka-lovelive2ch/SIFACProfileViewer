@@ -2893,6 +2893,10 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
+"react-native-camera@https://github.com/lwansbrough/react-native-camera":
+  version "0.6.0"
+  resolved "https://github.com/lwansbrough/react-native-camera#9fd9d1f8b181eb1ba162c19f52d43e8ea492e285"
+
 react-native@0.42.3:
   version "0.42.3"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.42.3.tgz#450c8a03a5e3e991a08a426f22776dd8feb80b26"
