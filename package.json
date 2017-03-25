@@ -13,6 +13,11 @@
 		"react-native": "0.42.3",
 		"react-native-camera": "https://github.com/lwansbrough/react-native-camera",
 		"react-native-sqlite-storage": "^3.2.2",
+		"react-navigation": "^1.0.0-beta.7",
+		"react-navigation-addons": "https://github.com/satya164/react-navigation-addons",
+		"react-redux": "^5.0.3",
+		"redux": "^3.6.0",
+		"redux-thunk": "^2.2.0",
 		"sqlite": "^2.5.0",
 		"sqlite3": "^3.1.8"
 	},
