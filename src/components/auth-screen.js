@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { View, ScrollView, Text, TextInput, Button, StyleSheet, AsyncStorage } from 'react-native'
 import ArcadeModal from './select-arcade-modal'
 import { NavigationActions } from 'react-navigation'
+import Theme from '../theme'
 
 class AuthScreen extends Component {
   constructor(props) {
@@ -76,7 +77,7 @@ class AuthScreen extends Component {
           <Button
             title='作成'
             disabled={disabledButton}
-            color={disabledButton ? '#CCC' : '#393e7a' }
+            color={disabledButton ? Theme.button.disabled : Theme.button.primary }
             onPress={this.createUser.bind(this)}/>
         </View>
       </View>

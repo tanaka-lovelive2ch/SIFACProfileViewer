@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Button, ScrollView, TouchableOpacity, View, Text, AsyncStorage } from 'react-native'
 import { StackNavigator, DrawerNavigator, NavigationActions } from 'react-navigation'
 import MyDrawer from './my-drawer'
-
+import Theme from '../theme'
 import ActionButton from 'react-native-action-button'
 
 class CardsScreen extends Component {
@@ -44,6 +44,9 @@ const ConnectedCardsScreen = connect()(CardsScreen)
 const HomeStack = StackNavigator({
   Cards: {
     screen: ConnectedCardsScreen,
+    navigationOptions: {
+      header: { ...Theme.header }
+    }
   }
 }, {
   initialRouteName: 'Cards'

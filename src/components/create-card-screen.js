@@ -5,13 +5,18 @@ import ImagePicker from 'react-native-image-picker'
 import SelectArcadeModal from './select-arcade-modal'
 import SelectTitleModal from './select-title-modal'
 import SkillPicker from './skill-picker'
+import DatePicker from 'react-native-datepicker'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Theme from '../theme'
+import * as CardsActions from '../actions/cards'
+import * as momentBase from 'moment'
+const moment = momentBase.default
 
 class CreateCardScreen extends Component {
-
   constructor(props) {
     super(props)
 
-
+    const now = moment().format('YYYY-MM-DD HH:mm')
     this.state = {
       imageUri: null,
       imageSize: { width: 0, height: 0 },
@@ -22,21 +27,31 @@ class CreateCardScreen extends Component {
       cameraSkill: { skill: null, level: 1},
       stageSkill: { skill: null, level: 1},
       character: null,
+      date: now,
       modal: null
     }
   }
 
-  componentDidMount() {
-    this.fetchDefaultPlayerName()
+  setState(newState) {
+    const navState = this.props.navigation.state
+    const prevParams = navState.params ? navState.params : {}
+    const disabled = !(newState.imageUri && newState.imageUri.length > 0)
+    
+    super.setState(newState)
+    this.props.navigation.setParams({
+      ...prevParams,
+      disabled
+    })
   }
   
-  fetchDefaultPlayerName() {
-    AsyncStorage.getItem('user:name').then((name) => {
-      this.setState({
-        ...this.state,
-        playerName: name
-      })
+  componentWillMount() {
+    this.props.navigation.setParams({
+      disable: true,
+      onPress: this.createCard.bind(this)
     })
+  }
+  componentDidMount() {
+    this.fetchDefaultPlayerName()
   }
   
   render() {
@@ -47,10 +62,17 @@ class CreateCardScreen extends Component {
       if (!uri) return null
       const dim = Dimensions.get('window')
       const imgWidth = dim.width -30*2
+      const imgStyle = {
+        width: imgWidth,
+        height: imgWidth * size.height / size.width
+      }
+      
       return (
-        <Image
-          style={{ width: imgWidth, height: imgWidth * size.height / size.width}}
-          source={{uri}}/>
+        <View style={{marginTop: 30}}>
+          <Image
+            style={imgStyle}
+            source={{uri}}/>
+        </View>
       )
     }
     
@@ -65,14 +87,33 @@ class CreateCardScreen extends Component {
           onSelect={this.onSelectTitle.bind(this)}
           onCancel={this.closeModal.bind(this)}/>
 
-        <Text style={style.subject}>画像</Text>
+        <Text style={[style.subject, { marginTop: 0 }]}>画像</Text>
         <View style={style.image}>
           {renderImage(this.state.imageUri, this.state.imageSize)}
-          <Button title='選択' onPress={this.pickImage.bind(this)}/>
+          <View style={{flexDirection: 'row', marginTop: 30}}>
+            <View style={{flex: 1}}>
+              <Button
+                title='選択'
+                color={Theme.button.primary}
+                onPress={this.pickImage.bind(this)}/>
+            </View>
+          </View>
         </View>
         
         <Text style={style.subject}>キャラクター</Text>
         {this.renderCharacterPicker(characters)}
+
+        <Text style={style.subject}>撮影日時</Text>
+        <View style={{flexDirection: 'row', marginTop: 30}}>
+          <View style={{flex: 1}}>
+            <DatePicker
+              style={{width: null}}
+              date={this.state.date}
+              mode='datetime'
+              format='YYYY-MM-DD HH:mm'
+              onDateChange={this.onDateChange.bind(this)}/>
+          </View>
+        </View>
         
         <Text style={style.subject}>プレイヤー名</Text>
         <TextInput
@@ -82,10 +123,17 @@ class CreateCardScreen extends Component {
         
         <Text style={style.subject}>称号</Text>
         <View style={style.myArcade}>
-          <Text>
+          <Text style={{paddingVertical: 30 }}>
             {this.state.title ? this.state.title.name : '未選択'}
           </Text>
-          <Button title='選択' onPress={this.openTitleModal.bind(this)}/>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{flex: 1}}>
+              <Button
+                title='選択'
+                color={Theme.button.primary}
+                onPress={this.openTitleModal.bind(this)}/>
+            </View>
+          </View>
         </View>
 
         <Text style={style.subject}>サポートスキル</Text>
@@ -110,11 +158,18 @@ class CreateCardScreen extends Component {
         </View>
         
         <Text style={style.subject}>店舗</Text>
-        <View style={style.myArcade}>
-          <Text>
+        <View style={[style.myArcade, { marginBottom: 30 }]}>
+          <Text style={{paddingVertical: 30}}>
             {this.state.arcade ? this.state.arcade.name : '未選択'}
           </Text>
-          <Button title='選択' onPress={this.openArcadeModal.bind(this)}/>
+          <View style={{flexDirection: 'row', marginBottom: 30}}>
+            <View style={{flex: 1}}>
+              <Button
+                title='選択'
+                color={Theme.button.primary}
+                onPress={this.openArcadeModal.bind(this)}/>
+            </View>
+          </View>
         </View>
       </ScrollView>
     )
@@ -147,6 +202,13 @@ class CreateCardScreen extends Component {
     )
   }
 
+  onDateChange(date) {
+    this.setState({
+      ...this.state,
+      date: date
+    })
+  }
+  
   changeCharacter(id) {
     const characters = this.props.character.list
     const selected = characters.find((c) => c.id === id)
@@ -225,6 +287,15 @@ class CreateCardScreen extends Component {
       modal: null
     })
   }
+
+  fetchDefaultPlayerName() {
+    AsyncStorage.getItem('user:name').then((name) => {
+      this.setState({
+        ...this.state,
+        playerName: name
+      })
+    })
+  }
   
   pickImage() {
     const that = this
@@ -262,12 +333,49 @@ class CreateCardScreen extends Component {
       }
     })
   }
+
+  createCard() {
+    const { date, imageUri, playerName, title, arcade, supportSkill, stageSkill, cameraSkill, character } = this.state
+
+    const params = {
+      imageUri, playerName, arcade, title, character,
+      supportSkill, cameraSkill, stageSkill, date
+    }
+    
+    this.props.createCard(params).then((action) => {
+      this.props.navigation.goBack()
+    })
+  }
 }
 
 CreateCardScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
   character: PropTypes.object.isRequired,
   skill: PropTypes.object.isRequired,
-  title: PropTypes.object.isRequired
+  title: PropTypes.object.isRequired,
+  createCard: PropTypes.func.isRequired
+}
+
+CreateCardScreen.navigationOptions = {
+  title: 'プロフィールカード作成',
+  header: (navigation) => {
+    const { state } = navigation
+    const params = state.params ? state.params : { disabled: true }
+    const onPress = params.onPress ? params.onPress : () => {} 
+    return {
+      ...Theme.header,
+      right: (
+        <View style={{marginRight: 10}}>
+          <TouchableOpacity
+            style={{backgroundColor: params.disabled ? '#CCC' : '#504dcb', borderRadius: 5, paddingHorizontal: 20, paddingVertical: 8}}
+            disabled={params.disabled}
+            onPress={onPress}>
+            <Icon name='check' color='#fff' size={20}/>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+  }
 }
 
 export default connect((state) => {
@@ -276,12 +384,16 @@ export default connect((state) => {
     skill: state.skill,
     title: state.title
   }
+}, (dispatch) => {
+  return {
+    createCard: (params) => dispatch(CardsActions.createCard(params))
+  }
 })(CreateCardScreen)
 
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30
+    padding: 30,
   },
   description: {
     alignItems: 'center',
@@ -296,22 +408,15 @@ const style = StyleSheet.create({
     borderColor: '#CCC',
     marginTop: 30
   },
-  createButton: {
-    flex: 1, 
-    justifyContent: 'flex-end'
-  },
   myArcade: {
     alignItems: 'center',
-    paddingVertical: 30
   },
   skill: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 30
   },
   image: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 30
   }
 })

@@ -2,6 +2,7 @@ import { StackNavigator } from 'react-navigation'
 import HomeScreen from './home-screen'
 import AuthScreen from './auth-screen'
 import CreateCardScreen from './create-card-screen'
+import Theme from '../theme'
 
 const RootNavigator = StackNavigator({
   Home: {
@@ -13,9 +14,14 @@ const RootNavigator = StackNavigator({
     }
   },
   Auth: {
-    screen: AuthScreen
+    screen: AuthScreen,
+    navigationOptions: {
+      header: { ...Theme.header }
+    }
   },
-  CreateCard: { screen: CreateCardScreen }
+  CreateCard: {
+    screen: CreateCardScreen,
+  }
 }, {
   initialRouteName: 'Auth'
 })
