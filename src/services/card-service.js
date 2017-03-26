@@ -229,7 +229,7 @@ class CardService {
   create(params) {
     const getSkill = (skill) => {
       return [
-        skill.id,
+        skill.skill ? skill.skill.id : null,
         skill.level > 0 && skill.level <= 10 ? skill.level : 1
       ]
     }
@@ -265,7 +265,7 @@ class CardService {
   update(params) {
     const getSkill = (skill) => {
       return [
-        skill.id,
+        skill.skill ? skill.skill.id : null,
         skill.level > 0 && skill.level <= 10 ? skill.level : 1
       ]
     }

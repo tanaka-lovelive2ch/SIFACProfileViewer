@@ -52,7 +52,7 @@ export default class SkillPicker extends Component {
       skill: value
     })
 
-    const skill = value > 0 && value < this.props.skills.length ? this.props.skills[value] : null
+    const skill = value > 0 && (value - 1) < this.props.skills.length ? this.props.skills[value - 1] : null
     this.props.onSelect({
       skill,
       level: this.state.level
@@ -66,7 +66,7 @@ export default class SkillPicker extends Component {
     })
 
     const value = this.state.skill
-    const skill = value > 0 && value < this.props.skills.length ? this.props.skills[value] : null
+    const skill = value > 0 && (value - 1) < this.props.skills.length ? this.props.skills[value - 1] : null
     this.props.onSelect({
       skill, level
     })
