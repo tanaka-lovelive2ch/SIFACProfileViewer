@@ -50,7 +50,14 @@ class CreateCardScreen extends Component {
       onPress: this.createCard.bind(this)
     })
   }
+  
   componentDidMount() {
+    const defaultCharacter = this.props.character.list.size > 0 ? this.props.character.list.get(0) : { id: null, name: '' }
+    
+    this.setState({
+      ...this.state,
+      character: defaultCharacter
+    })
     this.fetchDefaultPlayerName()
   }
   
@@ -339,7 +346,7 @@ class CreateCardScreen extends Component {
 
     const params = {
       imageUri, playerName, arcade, title, character,
-      supportSkill, cameraSkill, stageSkill, date
+      supportSkill, cameraSkill, stageSkill, printedAt: date
     }
     
     this.props.createCard(params).then((action) => {

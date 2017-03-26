@@ -11,7 +11,7 @@ export default class SkillPicker extends Component {
     }
   }
   render() {
-    const levelItems = [1,2,3,4,5,6,7,8,9].map((i) => {
+    const levelItems = [1,2,3,4,5,6,7,8,9, 10].map((i) => {
       return (
         <Picker.Item
           key={i}

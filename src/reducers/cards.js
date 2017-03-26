@@ -3,11 +3,12 @@ import * as CardsActions from '../actions/cards'
 
 const CardsStateBase = Record({
   list: List(),
-  index: null
+  index: null,
+  refreshing: false
 })
 
 class CardsState extends CardsStateBase {
-  set list(array) {
+  setList(array) {
     if (Array.isArray(array)) {
       return this.set('list', List(array))
         .set('index', array.length > 0 ? 0 : null)
@@ -21,7 +22,7 @@ class CardsState extends CardsStateBase {
     return this.get('list')
   }
 
-  set index(idx) {
+  setIndex(idx) {
     const currentSize = this.get('list').size
     if (Number.isInteger(idx) && idx >= 0 && idx < currentSize) {
       return this.set('index', idx)
@@ -33,6 +34,14 @@ class CardsState extends CardsStateBase {
   get index() {
     return this.get('index')
   }
+
+  setRefreshing(flag) {
+    return this.set('refreshing', flag)
+  }
+
+  get refreshing() {
+    return this.get('refreshing')
+  }
 }
 
 const initialState = new CardsState()
@@ -40,9 +49,13 @@ const initialState = new CardsState()
 export default function(state = initialState, action) {
   switch(action.type) {
   case CardsActions.UPDATE_CARDS:
-    return state.list = action.cards
+    return state.setList(action.cards)
   case CardsActions.SELECT_CARD:
-    return state.index = action.index
+    return state.setIndex(action.index)
+  case CardsActions.START_REFRESHING:
+    return state.setRefreshing(true)
+  case CardsActions.FINISH_REFRESHING:
+    return state.setRefreshing(false)
   }
 
   return state

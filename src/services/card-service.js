@@ -1,5 +1,6 @@
 import DbService from './db-service'
 import moment from 'moment'
+import { Record } from 'immutable'
 
 function wrapArray(data) {
   if (Array.isArray(data)) return data
@@ -166,6 +167,28 @@ export class CardQuery {
   }
 }
 
+const Card = Record({
+  id: null,
+  imageUri: null,
+  playerName: null,
+  arcadeId: null,
+  characterId: null,
+  titleId: null,
+  printedAt: null,
+  supportSkill: {
+    id: null,
+    level: 1
+  },
+  cameraSkill: {
+    id: null,
+    level: 1,
+  },
+  stageSkill: {
+    id: null,
+    level: 1
+  }
+})
+
 class CardService {
   isInitialized() {
     return DbService.isInitialized()
@@ -177,7 +200,29 @@ class CardService {
     return DbService.execute(
       sql, params
     ).then(([result]) => {
-      return result.rows.raw()
+      return result.rows.raw().map((c) => {
+        return new Card({
+          id: c.id,
+          imageUri: c.image_uri,
+          playerName: c.player_name,
+          arcadeId: c.arcade_id,
+          characterId: c.character_id,
+          titleId: c.title_id,
+          printedAt: c.printed_at,
+          supportSkill: {
+            id: c.support_skill_id,
+            level: c.support_skill_level
+          },
+          cameraSkill: {
+            id: c.camera_skill_id,
+            level: c.camera_skill_level,
+          },
+          stageSkill: {
+            id: c.stage_skill_id,
+            level: c.stage_skill_level
+          }
+        })
+      })
     })
   }
 
@@ -194,11 +239,12 @@ class CardService {
     const stageSkill = params.stageSkill ? getSkill(params.stageSkill) : [ null, 1]
     
     const array = [
+      params.imageUri,
       params.arcade ? params.arcade.id : null,
       params.character.id,
       params.title ? params.title.id : null,
       params.playerName ? params.playerName : null,
-      params.date ? moment(params.date).format('YYYY-MM-DD HH:mm') : null,
+      params.printedAt ? moment(params.printedAt).format('YYYY-MM-DD HH:mm') : null,
       suportSkill[0], suportSkill[1],
       cameraSkill[0], cameraSkill[1],
       stageSkill[0], stageSkill[1]
@@ -207,11 +253,13 @@ class CardService {
     const placeholders = getPlaceholders(array)
     return DbService.execute(
       'insert into profile_cards '
-        + '(arcade_id, character_id, title_id, player_name, printed_at, support_skill_id, ' +
+        + '(image_uri, arcade_id, character_id, title_id, player_name, printed_at, support_skill_id, ' +
         'support_skill_level, camera_skill_id, camera_skill_level, stage_skill_id, stage_skill_level)' +
         ' values ' + placeholders,
       array
-    )
+    ).then(([result]) => {
+      return result.insertId
+    })
   }
 
   update(params) {
@@ -231,7 +279,7 @@ class CardService {
       params.character.id,
       params.title ? params.title.id : null,
       params.playerName ? params.playerName : null,
-      params.date ? moment(params.date).format('YYYY-MM-DD HH:mm') : null,
+      params.printedAt ? moment(params.printedAt).format('YYYY-MM-DD HH:mm') : null,
       suportSkill[0], suportSkill[1],
       cameraSkill[0], cameraSkill[1],
       stageSkill[0], stageSkill[1],
@@ -246,7 +294,9 @@ class CardService {
         + ' camera_skill_level = ?, stage_skill_id = ?, stage_skill_level = ?'
         + ' where id = ?',
       array
-    )
+    ).then(([result]) => {
+      return result.rowsAffected
+    })
   }
 }
 
