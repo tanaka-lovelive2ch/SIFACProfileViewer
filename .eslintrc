@@ -23,5 +23,8 @@
     indent: ["error", 2, {"SwitchCase": 0}],
     "no-console": 1,
     "semi": [2, "never"],
+  },
+  "globals": {
+    "Promise": true
   }
 }

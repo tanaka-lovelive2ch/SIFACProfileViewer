@@ -1,35 +1,59 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Button, View, Text, AsyncStorage } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { Button, ScrollView, TouchableOpacity, View, Text, AsyncStorage } from 'react-native'
+import { StackNavigator, DrawerNavigator, NavigationActions } from 'react-navigation'
+import MyDrawer from './my-drawer'
 
+import ActionButton from 'react-native-action-button'
 
-class HomeScreen extends Component {
+class CardsScreen extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      cards: []
+    }
   }
+
   render() {
     
-    
     return (
-      <View style={{flex: 1, flexDirection: 'row'}}>
-
+      <View style={{flex: 1}}>
+        <ActionButton
+          buttonColor="rgba(231,76,60,1)"
+          onPress={this.openCreateCard.bind(this)}/>
       </View>
     )
   }
 
-  takePicture() {
-
+  openCreateCard() {
+    this.props.navigation.navigate('CreateCard')
   }
 }
 
-HomeScreen.propTypes = {
+CardsScreen.propTypes = {
   navigation: PropTypes.object.isRequired
 }
 
-HomeScreen.navigationOptions = {
+CardsScreen.navigationOptions = {
   title: 'Home'
 }
 
-export default connect()(HomeScreen)
+const ConnectedCardsScreen = connect()(CardsScreen)
+
+const HomeStack = StackNavigator({
+  Cards: {
+    screen: ConnectedCardsScreen,
+  }
+}, {
+  initialRouteName: 'Cards'
+})
+
+const HomeScreen = DrawerNavigator({
+  Home: { screen: HomeStack },
+}, {
+  initialRouteName: 'Home',
+  contentComponent: MyDrawer
+})
+
+export default HomeScreen
