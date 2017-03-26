@@ -3160,10 +3160,6 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-"react-native-camera@https://github.com/lwansbrough/react-native-camera":
-  version "0.6.0"
-  resolved "https://github.com/lwansbrough/react-native-camera#9fd9d1f8b181eb1ba162c19f52d43e8ea492e285"
-
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -3180,12 +3176,9 @@ react-native-drawer-layout@~1.1.5:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
-react-native-sqlite-storage@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-sqlite-storage/-/react-native-sqlite-storage-3.2.2.tgz#baa999cf55219f1438a0435239ae7571195a689e"
-  dependencies:
-    rnpm "1.5.2"
-    xcode "0.8.9"
+react-native-image-picker@^0.26.2:
+  version "0.26.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.26.2.tgz#1280627d61438027284c97d0a8892b7d3777f2e3"
 
 "react-native-sqlite-storage@https://github.com/andpor/react-native-sqlite-storage":
   version "3.2.2"
