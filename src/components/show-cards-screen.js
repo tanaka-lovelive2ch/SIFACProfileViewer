@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { TouchableWithoutFeedback, Image, Dimensions, ScrollView, TouchableOpacity, View, Text } from 'react-native'
 import ScrollableTabView from 'react-native-scrollable-tab-view'
+import NavigationBarAndroid from '../navigation-bar-android'
 import Theme from '../theme'
 
 class ShowCardsScreen extends Component {
@@ -10,10 +11,20 @@ class ShowCardsScreen extends Component {
 
     const card = props.card
     this._initialIndex = card.index < card.list.size ? card.index : 0
+    this._hideNativeButtons = () => {
+      console.log('hide')
+    }
+    this._showNativeButtons = () => {
+      console.log('show')
+    }
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    NavigationBarAndroid.hide()
+  }
 
+  componentWillUnmount() {
+    NavigationBarAndroid.show()
   }
   
   render() {

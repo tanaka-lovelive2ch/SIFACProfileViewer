@@ -4,6 +4,8 @@ import AuthScreen from './auth-screen'
 import CreateCardScreen from './create-card-screen'
 import ShowCardsScreen from './show-cards-screen'
 import Theme from '../theme'
+import { enhance } from 'react-navigation-addons'
+
 
 const RootNavigator = StackNavigator({
   Home: {
