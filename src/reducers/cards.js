@@ -1,5 +1,6 @@
 import { Record, List } from 'immutable'
 import * as CardsActions from '../actions/cards'
+import { NavigationActions } from 'react-navigation'
 
 const CardsStateBase = Record({
   list: List(),
@@ -48,6 +49,12 @@ const initialState = new CardsState()
 
 export default function(state = initialState, action) {
   switch(action.type) {
+  case NavigationActions.NAVIGATE:
+    if (action.routeName === 'ShowCards' && action.params && action.params.initialCard) {
+      const index = state.list.findIndex((c) => c.get('id') === action.params.initialCard.get('id'))
+      return state.setIndex(index >= 0 ? index : null)
+    }
+    break
   case CardsActions.UPDATE_CARDS:
     return state.setList(action.cards)
   case CardsActions.SELECT_CARD:

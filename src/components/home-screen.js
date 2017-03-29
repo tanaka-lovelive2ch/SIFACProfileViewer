@@ -11,7 +11,7 @@ import { CardQuery } from '../services/card-service'
 class CardsScreen extends Component {
   constructor(props) {
     super(props)
-
+    
     this.state = {
       cards: [],
       query: new CardQuery
@@ -79,11 +79,13 @@ class CardsScreen extends Component {
 
       const card = pair[0]
       return (
-        <View style={cardStyle}>
+        <TouchableOpacity
+           style={cardStyle}
+           onPress={this.openShowCards.bind(this, card)}>
           <Image
             style={{width :imgWidth, height: imgWidth}}
             source={{uri: card.get('imageUri')}}/>
-        </View>
+        </TouchableOpacity>
       )
     }
 
@@ -94,10 +96,13 @@ class CardsScreen extends Component {
       
       const card = pair[1]
       return (
-        <View style={cardStyle}>
-          <Image style={{width: imgWidth, height: imgWidth}}
-            source={{uri: card.imageUri}}/>
-        </View>
+        <TouchableOpacity
+           style={cardStyle}
+           onPress={this.openShowCards.bind(this, card)}>
+          <Image
+             style={{width: imgWidth, height: imgWidth}}
+             source={{uri: card.get('imageUri')}}/>
+        </TouchableOpacity>
       )
     }
     
@@ -113,6 +118,10 @@ class CardsScreen extends Component {
     this.props.navigation.navigate('CreateCard')
   }
 
+  openShowCards(initialCard) {
+    this.props.navigation.navigate('ShowCards', { initialCard })
+  }
+  
   refreshControl() {
     return (
       <RefreshControl
