@@ -298,6 +298,12 @@ class CardService {
       return result.rowsAffected
     })
   }
+
+  delete(id) {
+    return DbService.execute(
+      'delete from profile_cards where id = ?', [id]
+    )
+  }
 }
 
 let service = new CardService()

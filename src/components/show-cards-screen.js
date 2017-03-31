@@ -4,6 +4,8 @@ import { TouchableWithoutFeedback, Image, Dimensions, ScrollView, TouchableOpaci
 import ScrollableTabView from 'react-native-scrollable-tab-view'
 import NavigationBarAndroid from '../navigation-bar-android'
 import Theme from '../theme'
+import DeleteModal from './delete-modal'
+import * as CardActions from '../actions/cards'
 
 class ShowCardsScreen extends Component {
   constructor(props) {
@@ -11,11 +13,9 @@ class ShowCardsScreen extends Component {
 
     const card = props.card
     this._initialIndex = card.index < card.list.size ? card.index : 0
-    this._hideNativeButtons = () => {
-      console.log('hide')
-    }
-    this._showNativeButtons = () => {
-      console.log('show')
+    this.state = {
+      modal: null,
+      currentIndex: this._initialIndex
     }
   }
 
@@ -26,6 +26,12 @@ class ShowCardsScreen extends Component {
   componentWillUnmount() {
     NavigationBarAndroid.show()
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.card.list.size < 1) {
+      nextProps.navigation.goBack()
+    }
+  }
   
   render() {
     const { card } = this.props
@@ -34,18 +40,24 @@ class ShowCardsScreen extends Component {
     const index = card.index < card.list.size ? card.index : 0
 
     return (
-      <TouchableWithoutFeedback
-         style={{flex: 1}}
-         onPress={this.toggleHeader.bind(this)}>
-        <ScrollableTabView
+      <View style={{flex: 1}}>
+        <DeleteModal
+           visible={this.state.modal === 'delete'}
+           onOK={this.deleteCard.bind(this)}
+           onCancel={this.hideModal.bind(this)}/>
+        <TouchableWithoutFeedback
            style={{flex: 1}}
-           ref={this.setTabView.bind(this)}
-           renderTabBar={this.renderTabBar}
-           initialPage={this._initialIndex}>
-          
-          {this.renderCards()}
-        </ScrollableTabView>
-      </TouchableWithoutFeedback>
+           onPress={this.toggleHeader.bind(this)}>
+          <ScrollableTabView
+             style={{flex: 1}}
+             ref={this.setTabView.bind(this)}
+             renderTabBar={this.renderTabBar}
+             initialPage={this._initialIndex}>
+            
+            {this.renderCards()}
+          </ScrollableTabView>
+        </TouchableWithoutFeedback>
+      </View>
     )
   }
 
@@ -59,6 +71,7 @@ class ShowCardsScreen extends Component {
       
       return (
         <TouchableWithoutFeedback
+           onLongPress={this.showDeleteModal.bind(this)}
            onPress={this.toggleHeader.bind(this)}
            key={id}
            style={{flex: 1, justifyContent: 'flex-end'}}
@@ -77,6 +90,31 @@ class ShowCardsScreen extends Component {
 
   setTabView(ref) {
     this._tabView = ref
+  }
+
+  onChangeTab(data) {
+    const key = data.i
+    this.setState({
+      currentIndex: key
+    })
+  }
+  
+  deleteCard(deleteFile) {
+    this.props.deleteCard(this.props.card.list.get(this.state.currentIndex), deleteFile).then(() => {
+      this.hideModal()
+    })
+  }
+  
+  showDeleteModal() {
+    this.setState({
+      modal: 'delete'
+    })
+  }
+
+  hideModal() {
+    this.setState({
+      modal: null
+    })
   }
 }
 
@@ -102,6 +140,11 @@ export default connect((state) => {
   return {
     card: state.card
   }
+}, (dispatch) => {
+  return {
+    deleteCard: (card, deleteFile) => dispatch(CardActions.deleteCard(card, deleteFile))
+  }
+  
 })(ShowCardsScreen)
 
 const transparentHeaderStyle = {

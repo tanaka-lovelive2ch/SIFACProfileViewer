@@ -1,3 +1,4 @@
+import RNFetchBlob from 'react-native-fetch-blob'
 import CardService from '../services/card-service'
 
 export const START_REFRESHING = 'START_REFRESHING'
@@ -46,6 +47,32 @@ export function createCard(params) {
       return dispatch({
         type: CREATE_CARD,
         insertId
+      })
+    })
+  }
+}
+
+export const DELETE_CARD = 'DELETE_CARD'
+export function deleteCard(card, deleteFile = false) {
+  return (dispatch) => {
+    if (!card.imageUri) {
+      return new Promise((resolve, reject) => {
+        resolve(true)
+      })
+    }
+
+    const p = CardService.delete(card.id).then(() => {
+      if (deleteFile) {
+        return RNFetchBlob.fs.unlink(card.imageUri)
+      }
+
+      return 
+    })
+
+    return p.then(() => {
+      return dispatch({
+        type: DELETE_CARD,
+        card
       })
     })
   }

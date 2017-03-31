@@ -9,6 +9,15 @@ const CardsStateBase = Record({
 })
 
 class CardsState extends CardsStateBase {
+  delete(id) {
+    const removed = this.set('list', this.get('list').filter((card) => card.id !== id))
+    if (this.get('index') >= this.get('list').size) {
+      return removed.set('index', this.get('list').size - 1)
+    }
+
+    return removed
+  }
+  
   setList(array) {
     if (Array.isArray(array)) {
       return this.set('list', List(array))
@@ -63,6 +72,8 @@ export default function(state = initialState, action) {
     return state.setRefreshing(true)
   case CardsActions.FINISH_REFRESHING:
     return state.setRefreshing(false)
+  case CardsActions.DELETE_CARD:
+    return state.delete(action.card.id)
   }
 
   return state
