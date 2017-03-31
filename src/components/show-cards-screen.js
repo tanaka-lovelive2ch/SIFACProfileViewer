@@ -124,14 +124,15 @@ ShowCardsScreen.propTypes = {
 }
 
 ShowCardsScreen.navigationOptions = {
-  header: ({state}) => {
+  header: (navigation) => {
+    const state = navigation.state
     const navParams = state.params ? state.params : { showHeader: false }
-    
+
     return {
       ...Theme.header,
       visible: navParams.showHeader ? navParams.showHeader : false,
       style: transparentHeaderStyle,
-      title: ''
+      title: '',
     }
   }
 }

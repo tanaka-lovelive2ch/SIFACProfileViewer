@@ -156,9 +156,17 @@ export class CardQuery {
         params: c.params
       }
     })
-
-    const whereStr = conditions.length > 0 ? 'where ' + conditions.join(' or ') : ''
-    const params = conditions.map((c) => c.params)
+    
+    const whereStr = (conditions.length > 0 ? ' where ' : '') + conditions.reduce((prev, c, index) => {
+      if (index > 0)
+        return ' AND ' + c.str
+      else
+        return c.str
+    }, '')
+    
+    const params = conditions.map((c) => c.params).reduce((prev, c) => {
+      return prev.concat(c)
+    }, [])
     
     return {
       sql: 'select * from profile_cards ' + whereStr,

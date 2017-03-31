@@ -7,7 +7,8 @@ import Theme from '../theme'
 import ActionButton from 'react-native-action-button'
 import * as CardsActions from '../actions/cards'
 import { CardQuery } from '../services/card-service'
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+ 
 class CardsScreen extends Component {
   constructor(props) {
     super(props)
@@ -138,7 +139,21 @@ CardsScreen.propTypes = {
 }
 
 CardsScreen.navigationOptions = {
-  title: 'Home'
+  title: 'Home',
+  header: (navigation) => {
+    const onPress = () => { navigation.navigate('ChangeQuery') }
+    return {
+      ...Theme.header,
+      right: (
+        <TouchableOpacity
+           style={{marginRight: 10, borderRadius: 7, borderColor: '#333', padding: 10}}
+           onPress={onPress}>
+          <Icon name='magnify' size={20}/>
+        </TouchableOpacity>
+      )
+    }
+    
+  }
 }
 
 const ConnectedCardsScreen = connect((state) => {
@@ -154,9 +169,6 @@ const ConnectedCardsScreen = connect((state) => {
 const HomeStack = StackNavigator({
   Cards: {
     screen: ConnectedCardsScreen,
-    navigationOptions: {
-      header: { ...Theme.header }
-    }
   }
 }, {
   initialRouteName: 'Cards'
