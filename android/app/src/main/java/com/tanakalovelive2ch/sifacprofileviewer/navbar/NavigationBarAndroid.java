@@ -1,4 +1,4 @@
-package com.sifacprofileviewer.navbar;
+package com.tanakalovelive2ch.sifacprofileviewer.navbar;
 
 import android.app.Activity;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.sifacprofileviewer.navbar;
+package com.tanakalovelive2ch.sifacprofileviewer.navbar;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

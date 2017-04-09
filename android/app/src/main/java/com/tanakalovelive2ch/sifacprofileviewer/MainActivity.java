@@ -1,4 +1,4 @@
-package com.sifacprofileviewer;
+package com.tanakalovelive2ch.sifacprofileviewer;
 
 import com.facebook.react.ReactActivity;
 
